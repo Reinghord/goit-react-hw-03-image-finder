@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import PropTypes from 'prop-types';
 import s from './ImageGalleryItem.module.css';
 
 class ImageGalleryItem extends Component {
@@ -26,5 +27,10 @@ class ImageGalleryItem extends Component {
     });
   }
 }
+
+ImageGalleryItem.propTypes = {
+  photos: PropTypes.array.isRequired,
+  onHandleClick: PropTypes.func.isRequired,
+};
 
 export default ImageGalleryItem;

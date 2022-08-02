@@ -16,19 +16,6 @@ class App extends Component {
     clickedImg: {},
   };
 
-  modalRef = React.createRef();
-
-  onHandleData = data => {
-    this.setState({ photos: data, status: 'loaded' });
-  };
-
-  onHandleMoreData = data => {
-    this.setState({
-      photos: [...this.state.photos, ...data],
-      status: 'loaded',
-    });
-  };
-
   onSubmit = searchValue => {
     resetPage();
     this.setState({ status: 'pending', searchQuery: searchValue });
@@ -37,11 +24,22 @@ class App extends Component {
       .catch(error => console.log(error));
   };
 
+  onHandleData = data => {
+    this.setState({ photos: data, status: 'loaded' });
+  };
+
   onLoadMore = () => {
     this.setState({ status: 'pending' });
     pixFetch(this.state.searchQuery)
       .then(data => this.onHandleMoreData(data.hits))
       .catch(error => console.log(error));
+  };
+
+  onHandleMoreData = data => {
+    this.setState({
+      photos: [...this.state.photos, ...data],
+      status: 'loaded',
+    });
   };
 
   onHandleClick = click => {
@@ -85,7 +83,6 @@ class App extends Component {
           <Modal
             photo={this.state.clickedImg}
             onCloseModal={this.onCloseModal}
-            ref={this.modalRef}
           ></Modal>
         )}
       </>
