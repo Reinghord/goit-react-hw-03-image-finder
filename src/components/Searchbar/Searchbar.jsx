@@ -5,10 +5,14 @@ import s from './Searchbar.module.css';
 class Searchbar extends Component {
   state = { value: '' };
 
+  //Method to store input value in component state
   onHandleInput = e => {
     this.setState({ value: e.currentTarget.value });
   };
 
+  //Method to handle search submit
+  //Prevents page reloading
+  //Lifting state up using onSubmit prop
   onHandleSubmit = e => {
     e.preventDefault();
     const { onSubmit } = this.props;

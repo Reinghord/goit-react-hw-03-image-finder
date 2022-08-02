@@ -3,13 +3,16 @@ import PropTypes from 'prop-types';
 import s from './Modal.module.css';
 
 class Modal extends Component {
+  //Adding listener to track keydown Escape
   componentDidMount() {
     document.addEventListener('keydown', this.handleClose);
   }
+  //Removing listener before unmounting component
   componentWillUnmount() {
     document.removeEventListener('keydown', this.handleClose);
   }
 
+  //Method to close modal on clicking Overlay or pressing Escape
   handleClose = e => {
     const { onCloseModal } = this.props;
     if (e.currentTarget === e.target) {

@@ -22,6 +22,7 @@ function pixFetch(searchValue) {
 
 export default pixFetch;
 
+//Function to reset PAGE_COUNTER
 export const resetPage = () => {
   PAGE_COUNTER = 1;
 };

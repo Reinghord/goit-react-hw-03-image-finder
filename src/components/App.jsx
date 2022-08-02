@@ -16,6 +16,9 @@ class App extends Component {
     clickedImg: {},
   };
 
+  //Method to fetch and render data on search submit
+  //It will reset PAGE_COUNTER for fetch
+  //Status state changing to pending to show spinner
   onSubmit = searchValue => {
     resetPage();
     this.setState({ status: 'pending', searchQuery: searchValue });
@@ -24,29 +27,35 @@ class App extends Component {
       .catch(error => console.log(error));
   };
 
-  onHandleData = data => {
-    this.setState({ photos: data, status: 'loaded' });
-  };
-
+  //Method to fetch data on clicking Load More button
+  //Pagination will continue from submitted query
+  //Status state changing to pending to show spinner
   onLoadMore = () => {
     this.setState({ status: 'pending' });
     pixFetch(this.state.searchQuery)
-      .then(data => this.onHandleMoreData(data.hits))
+      .then(data => this.onHandleData(data.hits))
       .catch(error => console.log(error));
   };
 
-  onHandleMoreData = data => {
-    this.setState({
-      photos: [...this.state.photos, ...data],
-      status: 'loaded',
-    });
+  //Method to handle data received from search submit
+  //Status state changing to loaded to show Load More button
+  onHandleData = data => {
+    this.setState(prevState =>
+      prevState.searchQuery !== this.state.searchQuery
+        ? { photos: data, status: 'loaded' }
+        : { photos: [...this.state.photos, ...data], status: 'loaded' }
+    );
   };
 
+  //Method to determine which picture user clicked
+  //Storing clicked image object in state
+  //Displaying modal window
   onHandleClick = click => {
     const foundImage = this.state.photos.find(photo => photo.tags === click);
     this.setState({ clickedImg: foundImage, showModal: true });
   };
 
+  //Method to close Modal window
   onCloseModal = handle => {
     if (handle === 'close') {
       this.setState({ showModal: false });
@@ -55,6 +64,7 @@ class App extends Component {
 
   render() {
     const spinnerStyle = { justifyContent: 'center' };
+
     return (
       <>
         <Searchbar onSubmit={this.onSubmit} />
@@ -64,6 +74,7 @@ class App extends Component {
             onHandleClick={this.onHandleClick}
           />
         </ImageGallery>
+
         {this.state.status === 'pending' && (
           <BallTriangle
             height={100}
@@ -76,9 +87,11 @@ class App extends Component {
             visible={true}
           />
         )}
+
         {this.state.status === 'loaded' && (
           <Button onLoadMore={this.onLoadMore} />
         )}
+
         {this.state.showModal && (
           <Modal
             photo={this.state.clickedImg}

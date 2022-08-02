@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import s from './ImageGalleryItem.module.css';
 
 class ImageGalleryItem extends Component {
+  //Lifting state up
   handleClick = e => {
     const { onHandleClick } = this.props;
     onHandleClick(e.target.alt);
