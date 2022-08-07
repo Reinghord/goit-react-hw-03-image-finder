@@ -56,10 +56,8 @@ class App extends Component {
   };
 
   //Method to close Modal window
-  onCloseModal = handle => {
-    if (handle === 'close') {
-      this.setState({ showModal: false });
-    }
+  onCloseModal = () => {
+    this.setState({ showModal: false });
   };
 
   render() {

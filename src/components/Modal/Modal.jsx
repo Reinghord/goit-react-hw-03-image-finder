@@ -15,12 +15,8 @@ class Modal extends Component {
   //Method to close modal on clicking Overlay or pressing Escape
   handleClose = e => {
     const { onCloseModal } = this.props;
-    if (e.currentTarget === e.target) {
-      onCloseModal('close');
-    }
-
-    if (e.code === 'Escape') {
-      onCloseModal('close');
+    if (e.currentTarget === e.target || e.code === 'Escape') {
+      onCloseModal();
     }
   };
 
