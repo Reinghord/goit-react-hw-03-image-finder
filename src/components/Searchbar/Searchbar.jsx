@@ -7,6 +7,7 @@ import {
   SearchFormButtonLabel,
   SearchFormInput,
 } from './Searchbar.styled';
+import { AiOutlineSearch } from 'react-icons/ai';
 
 class Searchbar extends Component {
   state = { value: '' };
@@ -30,6 +31,7 @@ class Searchbar extends Component {
       <SearchbarBox>
         <SearchForm onSubmit={this.onHandleSubmit}>
           <Button type="submit">
+            <AiOutlineSearch />
             <SearchFormButtonLabel>Search</SearchFormButtonLabel>
           </Button>
 
