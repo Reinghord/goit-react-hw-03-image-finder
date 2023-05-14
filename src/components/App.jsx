@@ -28,24 +28,43 @@ class App extends Component {
       .catch(error => console.log(error));
   };
 
+  //Method to handle data received from search submit
+  //Status state changing to loaded to show Load More button
+  //WARNING! Changing pixabay settings to load more than 12 pictures will break the logic
+  onHandleData = data => {
+    if (data.length === 12) {
+      return this.setState({ photos: data, status: 'loaded' });
+    }
+    if (data.length === 0) {
+      return this.setState({ photos: [], status: 'rejected' });
+    }
+    return this.setState({ photos: data, status: 'idle' });
+  };
+
   //Method to fetch data on clicking Load More button
   //Pagination will continue from submitted query
   //Status state changing to pending to show spinner
   onLoadMore = () => {
     this.setState({ status: 'pending' });
     pixFetch(this.state.searchQuery)
-      .then(data => this.onHandleData(data.hits))
+      .then(data => this.onHandleMoreData(data.hits))
       .catch(error => console.log(error));
   };
 
-  //Method to handle data received from search submit
+  //Method to handle data received from Load More button
   //Status state changing to loaded to show Load More button
-  onHandleData = data => {
-    this.setState(prevState =>
-      prevState.searchQuery !== this.state.searchQuery
-        ? { photos: data, status: 'loaded' }
-        : { photos: [...this.state.photos, ...data], status: 'loaded' }
-    );
+  //WARNING! Changing pixabay settings to load more than 12 pictures will break the logic
+  onHandleMoreData = data => {
+    if (data.length === 12) {
+      return this.setState({
+        photos: [...this.state.photos, ...data],
+        status: 'loaded',
+      });
+    }
+    return this.setState({
+      photos: [...this.state.photos, ...data],
+      status: 'idle',
+    });
   };
 
   //Method to determine which picture user clicked
@@ -89,6 +108,14 @@ class App extends Component {
 
         {this.state.status === 'loaded' && (
           <Button onLoadMore={this.onLoadMore} />
+        )}
+
+        {this.state.status === 'rejected' && (
+          <div>
+            Your generic alert to promt you that there are no images found, but
+            I was too lazy to style it. Hell, at least it removed that "Load
+            More" button from showing
+          </div>
         )}
 
         {this.state.showModal &&

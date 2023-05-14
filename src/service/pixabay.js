@@ -1,5 +1,6 @@
 let PAGE_COUNTER = 1;
 
+//WARNING! Changing per_page value requires adjustments at App.jsx
 function pixFetch(searchValue) {
   const BASIC_URL = `https://pixabay.com/api/`;
   const searchParam = new URLSearchParams({
