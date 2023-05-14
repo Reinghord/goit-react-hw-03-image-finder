@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import s from './ImageGalleryItem.module.css';
+import { Item, Image } from './ImageGalleryItem.styled';
 
 class ImageGalleryItem extends Component {
   //Lifting state up
@@ -13,17 +13,9 @@ class ImageGalleryItem extends Component {
     const { photos } = this.props;
     return photos.map(photo => {
       return (
-        <li
-          key={photo.id}
-          className={s.ImageGalleryItem}
-          onClick={this.handleClick}
-        >
-          <img
-            src={photo.webformatURL}
-            alt={photo.tags}
-            className={s.ImageGalleryItemImage}
-          />
-        </li>
+        <Item key={photo.id} onClick={this.handleClick}>
+          <Image src={photo.webformatURL} alt={photo.tags} tabIndex="0" />
+        </Item>
       );
     });
   }

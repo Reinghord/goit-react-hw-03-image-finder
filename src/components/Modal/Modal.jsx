@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import s from './Modal.module.css';
+import { Overlay, ModalWindow } from './Modal.styled';
 
 class Modal extends Component {
   //Adding listener to track keydown Escape
@@ -23,11 +23,11 @@ class Modal extends Component {
   render() {
     const { photo } = this.props;
     return (
-      <div className={s.Overlay} onClick={this.handleClose}>
-        <div className={s.Modal}>
+      <Overlay onClick={this.handleClose}>
+        <ModalWindow>
           <img src={photo.largeImageURL} alt={photo.tags} />
-        </div>
-      </div>
+        </ModalWindow>
+      </Overlay>
     );
   }
 }

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { createPortal } from 'react-dom';
 import pixFetch, { resetPage } from 'service/pixabay';
 import { BallTriangle } from 'react-loader-spinner';
 import ImageGallery from './ImageGallery';
@@ -90,12 +91,14 @@ class App extends Component {
           <Button onLoadMore={this.onLoadMore} />
         )}
 
-        {this.state.showModal && (
-          <Modal
-            photo={this.state.clickedImg}
-            onCloseModal={this.onCloseModal}
-          ></Modal>
-        )}
+        {this.state.showModal &&
+          createPortal(
+            <Modal
+              photo={this.state.clickedImg}
+              onCloseModal={this.onCloseModal}
+            ></Modal>,
+            document.body
+          )}
       </>
     );
   }

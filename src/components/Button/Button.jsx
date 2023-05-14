@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
-import s from './Button.module.css';
+import { ButtonBox } from './Button.styled';
 
 function Button({ onLoadMore }) {
   return (
-    <button className={s.Button} type="button" onClick={onLoadMore}>
+    <ButtonBox type="button" onClick={onLoadMore}>
       Load more
-    </button>
+    </ButtonBox>
   );
 }
 
