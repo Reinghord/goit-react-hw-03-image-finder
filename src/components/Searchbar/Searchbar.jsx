@@ -1,51 +1,45 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
-  SearchbarBox,
+  Box,
   SearchForm,
   Button,
   SearchFormButtonLabel,
   SearchFormInput,
+  SearchIcon,
 } from './Searchbar.styled';
-import { AiOutlineSearch } from 'react-icons/ai';
+import { Formik } from 'formik';
 
 class Searchbar extends Component {
-  state = { value: '' };
-
-  //Method to store input value in component state
-  onHandleInput = e => {
-    this.setState({ value: e.currentTarget.value });
-  };
-
   //Method to handle search submit
   //Prevents page reloading
   //Lifting state up using onSubmit prop
-  onHandleSubmit = e => {
-    e.preventDefault();
+  onHandleSubmit = (values, { resetForm }) => {
     const { onSubmit } = this.props;
-    onSubmit(this.state.value);
+    onSubmit(values.search);
+    resetForm();
   };
 
   render() {
     return (
-      <SearchbarBox>
-        <SearchForm onSubmit={this.onHandleSubmit}>
-          <Button type="submit">
-            <AiOutlineSearch />
-            <SearchFormButtonLabel>Search</SearchFormButtonLabel>
-          </Button>
+      <Box>
+        <Formik initialValues={{ search: '' }} onSubmit={this.onHandleSubmit}>
+          <SearchForm>
+            <Button type="submit">
+              <SearchIcon />
+              <SearchFormButtonLabel>Search</SearchFormButtonLabel>
+            </Button>
 
-          <SearchFormInput
-            type="text"
-            name="search"
-            value={this.state.value}
-            autoComplete="off"
-            autoFocus
-            placeholder="Search images and photos"
-            onChange={this.onHandleInput}
-          />
-        </SearchForm>
-      </SearchbarBox>
+            <SearchFormInput
+              type="text"
+              name="search"
+              autoComplete="off"
+              autoFocus
+              placeholder="Search images and photos"
+            />
+          </SearchForm>
+        </Formik>
+      </Box>
     );
   }
 }
