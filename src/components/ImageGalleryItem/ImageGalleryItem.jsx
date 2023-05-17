@@ -4,16 +4,16 @@ import { Item, Image } from './ImageGalleryItem.styled';
 
 class ImageGalleryItem extends Component {
   //Lifting state up
-  handleClick = e => {
+  handleClick = photo => {
     const { onHandleClick } = this.props;
-    onHandleClick(e.target.alt);
+    onHandleClick(photo);
   };
 
   render() {
     const { photos } = this.props;
     return photos.map(photo => {
       return (
-        <Item key={photo.id} onClick={this.handleClick}>
+        <Item key={photo.id} onClick={() => this.handleClick(photo)}>
           <Image src={photo.webformatURL} alt={photo.tags} tabIndex="0" />
         </Item>
       );
@@ -22,7 +22,7 @@ class ImageGalleryItem extends Component {
 }
 
 ImageGalleryItem.propTypes = {
-  photos: PropTypes.array.isRequired,
+  // photos: PropTypes.array.isRequired,
   onHandleClick: PropTypes.func.isRequired,
 };
 

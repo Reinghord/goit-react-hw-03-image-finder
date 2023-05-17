@@ -17,6 +17,10 @@ class App extends Component {
     clickedImg: {},
   };
 
+  // componentDidUpdate() {
+  //   if (status === pending) {}
+  // }
+
   //Method to fetch and render data on search submit
   //It will reset PAGE_COUNTER for fetch
   //Status state changing to pending to show spinner
@@ -71,7 +75,7 @@ class App extends Component {
   //Storing clicked image object in state
   //Displaying modal window
   onHandleClick = click => {
-    const foundImage = this.state.photos.find(photo => photo.tags === click);
+    const foundImage = click;
     this.setState({ clickedImg: foundImage, showModal: true });
   };
 
