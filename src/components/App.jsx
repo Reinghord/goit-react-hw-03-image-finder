@@ -17,9 +17,52 @@ class App extends Component {
     clickedImg: {},
   };
 
-  // componentDidUpdate() {
-  //   if (status === pending) {}
-  // }
+  async componentDidUpdate(_, pS) {
+    //Method to handle data received from Load More button
+    //Status state changing to loaded to show Load More button
+    //WARNING! Changing pixabay settings to load more than 12 pictures will break the logic
+    if (
+      this.state.status === 'pending' &&
+      pS.searchQuery !== this.state.searchQuery
+    ) {
+      const data = await pixFetch(this.state.searchQuery);
+
+      if (data.hits.length === 12) {
+        return this.setState({
+          photos: data.hits,
+          status: 'loaded',
+        });
+      }
+      if (data.hits.length === 0) {
+        return this.setState({ photos: [], status: 'rejected' });
+      }
+      return this.setState({
+        photos: data.hits,
+        status: 'idle',
+      });
+    }
+
+    //Method to handle data received from search submit
+    //Status state changing to loaded to show Load More button
+    //WARNING! Changing pixabay settings to load more than 12 pictures will break the logic
+    if (
+      this.state.status === 'pending' &&
+      pS.searchQuery === this.state.searchQuery
+    ) {
+      const data = await pixFetch(this.state.searchQuery);
+
+      if (data.hits.length === 12) {
+        return this.setState({
+          photos: [...pS.photos, ...data.hits],
+          status: 'loaded',
+        });
+      }
+      return this.setState({
+        photos: [...pS.photos, ...data.hits],
+        status: 'idle',
+      });
+    }
+  }
 
   //Method to fetch and render data on search submit
   //It will reset PAGE_COUNTER for fetch
@@ -27,22 +70,6 @@ class App extends Component {
   onSubmit = searchValue => {
     resetPage();
     this.setState({ status: 'pending', searchQuery: searchValue });
-    pixFetch(searchValue)
-      .then(data => this.onHandleData(data.hits))
-      .catch(error => console.log(error));
-  };
-
-  //Method to handle data received from search submit
-  //Status state changing to loaded to show Load More button
-  //WARNING! Changing pixabay settings to load more than 12 pictures will break the logic
-  onHandleData = data => {
-    if (data.length === 12) {
-      return this.setState({ photos: data, status: 'loaded' });
-    }
-    if (data.length === 0) {
-      return this.setState({ photos: [], status: 'rejected' });
-    }
-    return this.setState({ photos: data, status: 'idle' });
   };
 
   //Method to fetch data on clicking Load More button
@@ -50,25 +77,6 @@ class App extends Component {
   //Status state changing to pending to show spinner
   onLoadMore = () => {
     this.setState({ status: 'pending' });
-    pixFetch(this.state.searchQuery)
-      .then(data => this.onHandleMoreData(data.hits))
-      .catch(error => console.log(error));
-  };
-
-  //Method to handle data received from Load More button
-  //Status state changing to loaded to show Load More button
-  //WARNING! Changing pixabay settings to load more than 12 pictures will break the logic
-  onHandleMoreData = data => {
-    if (data.length === 12) {
-      return this.setState({
-        photos: [...this.state.photos, ...data],
-        status: 'loaded',
-      });
-    }
-    return this.setState({
-      photos: [...this.state.photos, ...data],
-      status: 'idle',
-    });
   };
 
   //Method to determine which picture user clicked
