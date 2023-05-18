@@ -18,49 +18,39 @@ class App extends Component {
   };
 
   async componentDidUpdate(_, pS) {
-    //Method to handle data received from Load More button
+    //Method to handle data received from Submit & Load More button
     //Status state changing to loaded to show Load More button
     //WARNING! Changing pixabay settings to load more than 12 pictures will break the logic
-    if (
-      this.state.status === 'pending' &&
-      pS.searchQuery !== this.state.searchQuery
-    ) {
+    if (this.state.status === 'pending') {
       const data = await pixFetch(this.state.searchQuery);
 
       if (data.hits.length === 12) {
-        return this.setState({
-          photos: data.hits,
-          status: 'loaded',
-        });
+        return this.setState(
+          pS.searchQuery !== this.state.searchQuery
+            ? {
+                photos: data.hits,
+                status: 'loaded',
+              }
+            : {
+                photos: [...pS.photos, ...data.hits],
+                status: 'loaded',
+              }
+        );
       }
       if (data.hits.length === 0) {
         return this.setState({ photos: [], status: 'rejected' });
       }
-      return this.setState({
-        photos: data.hits,
-        status: 'idle',
-      });
-    }
-
-    //Method to handle data received from search submit
-    //Status state changing to loaded to show Load More button
-    //WARNING! Changing pixabay settings to load more than 12 pictures will break the logic
-    if (
-      this.state.status === 'pending' &&
-      pS.searchQuery === this.state.searchQuery
-    ) {
-      const data = await pixFetch(this.state.searchQuery);
-
-      if (data.hits.length === 12) {
-        return this.setState({
-          photos: [...pS.photos, ...data.hits],
-          status: 'loaded',
-        });
-      }
-      return this.setState({
-        photos: [...pS.photos, ...data.hits],
-        status: 'idle',
-      });
+      return this.setState(
+        pS.searchQuery !== this.state.searchQuery
+          ? {
+              photos: data.hits,
+              status: 'idle',
+            }
+          : {
+              photos: [...pS.photos, ...data.hits],
+              status: 'idle',
+            }
+      );
     }
   }
 
@@ -70,6 +60,7 @@ class App extends Component {
   onSubmit = searchValue => {
     resetPage();
     this.setState({ status: 'pending', searchQuery: searchValue });
+    console.log(this.state);
   };
 
   //Method to fetch data on clicking Load More button
