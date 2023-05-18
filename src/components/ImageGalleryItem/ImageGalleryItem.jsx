@@ -22,7 +22,7 @@ class ImageGalleryItem extends Component {
 }
 
 ImageGalleryItem.propTypes = {
-  // photos: PropTypes.array.isRequired,
+  photos: PropTypes.array.isRequired,
   onHandleClick: PropTypes.func.isRequired,
 };
 

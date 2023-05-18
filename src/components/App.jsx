@@ -22,7 +22,9 @@ class App extends Component {
     //Status state changing to loaded to show Load More button
     //WARNING! Changing pixabay settings to load more than 12 pictures will break the logic
     if (this.state.status === 'pending') {
-      const data = await pixFetch(this.state.searchQuery);
+      const data = await pixFetch(this.state.searchQuery).then(
+        this.setState({ status: 'loading' })
+      );
 
       if (data.hits.length === 12) {
         return this.setState(
@@ -60,7 +62,6 @@ class App extends Component {
   onSubmit = searchValue => {
     resetPage();
     this.setState({ status: 'pending', searchQuery: searchValue });
-    console.log(this.state);
   };
 
   //Method to fetch data on clicking Load More button
@@ -73,8 +74,7 @@ class App extends Component {
   //Method to determine which picture user clicked
   //Storing clicked image object in state
   //Displaying modal window
-  onHandleClick = click => {
-    const foundImage = click;
+  onHandleClick = foundImage => {
     this.setState({ clickedImg: foundImage, showModal: true });
   };
 
@@ -96,7 +96,7 @@ class App extends Component {
           />
         </ImageGallery>
 
-        {this.state.status === 'pending' && (
+        {this.state.status === 'loading' && (
           <BallTriangle
             height={100}
             width={100}
